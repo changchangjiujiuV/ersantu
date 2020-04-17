@@ -1,0 +1,741 @@
+b 蓝色 ；m 紫红色 ；c 青色 ；r 红色 ；g 绿色 ；w 白色 ；k 黑色 ；y 黄色；
+
+- 实线 ；: 点连线 ；-. 点画线 ；-- 虚线 ；. 点 ；+ 十字号 ；* 星号 ；x ×号 ；
+
+s 正方形  ；d 菱形 ；o 圆圈 ；h 六角形 ；p 五角星 ；> 右三角 ；
+
+
+
+%%书【MATLAB基础与应用】
+
+01
+x=linspace(0,2*pi,30);
+y=sin(x);
+plot(x,y)
+
+02
+x=0:pi/15:2*pi;
+y1=sin(x);
+y2=cos(x);
+plot(x,y1,x,y2)
+
+03
+x=linspace(0,2*pi,30);y=sin(x);z=cos(x);
+plot(x,y,x,z)
+grid on
+xlabel('横坐标X')
+ylabel('纵坐标Y和Z')
+title('Sine和Cosin图像')
+
+04
+作出函数{x=2cost,y=3sint}的图像。
+
+t=-2*pi:0.1:2*pi;
+x=2.*cos(t);y=3*sin(t);
+plot(x,y,'r-.')
+
+05
+作出y={-x,x<0,,x^2,x>0}的图像。
+
+x1=-2:0.1:0;x2=0:0.1:2;
+y1=-x1;y2=x2.^2;
+plot(x1,y1,x2,y2,'r-')
+
+
+062
+x=[1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24];
+y=[57.6 114 157.5 187 207 235.2 250 265.2 286.2 302.4 312.8 307.4 306.8 300 271.4 231 160 111 91 54 45.5 30 8 4.5];
+plot(x,y,'*') 
+y1=polyfit(x,y,3);
+y2=poly2sym(y1);
+hold on
+ezplot(y2,[1 25])
+
+061
+x=[1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24];
+y=[57.6 114 157.5 187 207 235.2 250 265.2 286.2 302.4 312.8 307.4 306.8 300 271.4 231 160 111 91 54 45.5 30 8 4.5];
+plot(x,y,'*') 
+y1=polyfit(x,y,3);
+y2=poly2sym(y1);
+g = eval(['@(x)',vectorize(y2)])
+hold on
+fplot(g,[0,25]) 
+
+06
+散点图
+x=[1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24];
+y=[57.6 114 157.5 187 207 235.2 250 265.2 286.2 302.4 312.8 307.4 306.8 300 271.4 231 160 111 91 54 45.5 30 8 4.5];
+plot(x,y,'*') 
+y1=polyfit(x,y,3);
+y2=poly2sym(y1);
+y3=eval(y2);
+hold on
+plot(x,y3)
+
+%rat（P）分数表示
+sym2poly(T)把符号多项式变为可计算的多项式 即以矩阵的形式表示出来 
+（即提取系数）
+f = eval(['@(x)',f]); % 字符串转为函数
+
+a=polyfit(x,y,3);
+c1=polyval(a,x)
+  %%c1==c
+a=polyfit(x,y,3);
+b=poly2sym(a);
+c=eval(b)
+ plot(x,c1,'*',x,c)
+
+a=polyfit(x,y,3);
+x1=linspace(0,24,100);
+g=polyval(a,x1);
+plot(x1,g)
+
+(麻烦的方法，）
+x=[1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24];
+y=[57.6 114 157.5 187 207 235.2 250 265.2 286.2 302.4 312.8 307.4 306.8 300 271.4 231 160 111 91 54 45.5 30 8 4.5];
+a=polyfit(x,y,3);
+b=poly2sym(a);
+g = eval(['@(x)',vectorize(b)])
+% g =
+%  包含以下值的 function_handle:
+%   @(x)(1331036372299149.*x)./17592186044416-(1425991351912609.*x.^2)./281474976710656+(1436905048638063.*x.^3)./18014398509481984-31937./1012
+f=(1331036372299149.*x)./17592186044416-(1425991351912609.*x.^2)./281474976710656+(1436905048638063.*x.^3)./18014398509481984-31937./1012;
+plot(x,y,'*',x,f) 
+
+或者直接：
+f=matlabFunction(b)
+
+画符号函数：
+ezplot(b,[0,25])
+
+如果要替换变量
+syms t
+subs(f,t)
+
+
+07
+ezplot('tan(x)')
+
+08
+syms x y
+f=x^4+y^4-8*x^2-10*y^2+16;
+ezplot(F)
+
+09
+画f(x)={x+1,x<1;1+1/x,x>=1}的图形，
+cai02=@(x)(x+1)*(x<1)+(1+1/x)*(x>=1); fplot(cai02,[-3,3])
+
+10
+
+ ezplot('tan(x)',[0 8])
+ figure
+ fplot(@(x)tan(x),[0 8])
+
+11
+f='2*exp(-x).*sin(x)';
+fplot(f,[0 8])
+
+fplot(@(x)2.*exp(-x).*sin(x),[0 8])
+
+12
+x=-2*pi:0.1:2*pi;
+y1=sin(x);y2=sin(x+pi/3)+2;y3=cos(x);
+plot(x,y1,'.-');
+hold on
+plot(x,y2,'*-',x,y3,'-o')
+
+
+*************************************************************************
+b 001 蓝色 ,g 010 绿色  ,r 100 红色  ,c 011 青色  ,m 101 品红  ,y 110 黄色   ,k 000  黑色 ,w 111 白色 ;
+- （实线）（默认） ,-- （虚线） ,: （点线） ,-. （点画线） ;
++（加号） ,o（小圆圈） ,*（星号） ,.（实点） ,x（差号） ,d（棱形） ,^（上三角） ,>（右三角） ,<（左三角） ,s（正方形） ,h（正六角星） ,p（正五角星） ,v（下三角） ;
+
+
+2018书
+ch06
+01
+a=[13 9 24 7 18 11 9 12 19 25];
+plot(a)
+
+02
+x=0:0.2:1;
+y=[0 0 0 0;0.58 0.31 0.18 0.08;0.83 0.56 0.36 0.19;1.14 0.89 0.62 0.30;1.56 1.23 0.78 0.36;2.08 1.52 0.99 0.49];
+plot(x,y)
+
+03
+冒号指该维的全部
+如矩阵A=[1 2 3 4
+ 5 6 7 8]
+那么A(:,2),行坐标为冒号，则百表示所有行，2是列坐标，则A(:,2)代表第二列的所有行，也就是列向量：[2 6]'
+所以matlab T=(:,:,1)代表第一维、第二维的所有数据度，第知三维的第一个
+T是个三维矩阵
+
+1:3代表该维的第一个数到道第三个数
+
+还是之前的矩阵
+A(:,1:3)
+第一维是全部数据，第二维是第1个数到第三个数，也就是第一列到第三列的所有行
+[1 2 3
+5 6 7] 
+a(:) 是把 a 变成一个一维的列向量。再用 .' 转置就可以得到一维行向量了
+a(:, 1:3)=[]表示将数组a的第1到第3列删除。 第一个冒号( : )表示取数组a的所有行；
+
+04
+
+N=9;
+t=0:2*pi/N:2*pi;
+x=sin(t);y=cos(t);
+tt=reshape(t,2,(N+1)/2);        %(变形）
+tt=flipud(tt);                  %（上下翻转，fliplw左右翻转）
+tt=tt(:);                       %（变为一列）
+xx=sin(tt);yy=cos(tt);;
+plot(x,y)                       %在图中显示图形1
+hold on                         %打开保持命令
+plot(xx,y)                      %未输入保持关闭命令，在图中叠加显示图形2
+hold off 
+%figure;
+plot(xx,yy)                      %关闭保持命令，单独显示图形。
+
+N=9;
+t=0:N;
+x=sin(t);y=cos(t);
+tt=reshape(t,2,(N+1)/2);
+tt=flipud(tt);
+tt=tt(:)
+
+05
+axis ij ：矩阵轴模式   axis xy ：笛卡尔轴模式
+t=(0:pi/100:pi)';
+y1=sin(t)*[1,-1];
+y2=sin(t).*sin(9*t);
+t3=pi*(0:9)/9;
+y3=sin(t3).*sin(9*t3);
+plot(t,y1,'r:',t,y2,'-bo')
+figure
+plot(t3,y3,'s','MarkerSize',10,'MarkerEdgeColor',[0,1,0],'MarkerFaceColor',[1,0.8,0])
+axis([0,pi,-1,1])
+figure
+plot(t,y1,'r:',t,y2,'-bo',t3,y3,'s','MarkerSize',10,'MarkerEdgeColor',[0,1,0],'MarkerFaceColor',[1,0.8,0])
+
+%axis auto
+
+06
+N=9;
+t=0:N;
+x=sin(t);y=cos(t);
+tt=reshape(t,2,(N+1)/2);
+tt=flipud(tt);
+tt=tt(:)
+tt=tt(:).'
+
+
+N=9;
+t=0:2*pi/N:2*pi;
+x=sin(t);y=cos(t);
+tt=reshape(t,2,(N+1)/2);
+tt=flipud(tt);
+tt=tt(:);
+xx=sin(tt);yy=cos(tt);
+plot(x,y)                       %在图中显示图形1
+hold on                         %打开保持命令
+plot(xx,y)                      %未输入保持关闭命令，在图中叠加显示图形2
+hold off 
+figure;
+plot(xx,yy)                      %关闭保持命令，单独显示图形。
+fill(xx,yy,'k')
+
+07
+x=-pi:pi/10:pi;
+y1=exp(sin(x));
+y2=exp(cos(x));
+y3=exp(sin(x)+cos(x));
+y4=exp(sin(x)-cos(x));
+y5=0.2*exp(sin(x).*cos(x));
+y6=0.0*exp(sin(x).\cos(x));
+plot(x,y1,'b:');
+gtext('y1=exp(sin(x))');
+hold on
+plot(x,y2,'d-')
+gtext('y2=exp(cos(x))')
+hold on
+plot(x,y3,'m>:')
+gtext('y3=exp(sin(x)+cos(x))')
+hold on
+plot(x,y4,'rh-')
+gtext('y4=exp(sin(x)-cos(x))')
+hold on
+plot(x,y5,'gh-')
+gtext('y5=0.2*exp(sin(x).*cos(x))')
+hold on
+plot(x,y6,'bh-')
+gtext('y6=0.0*exp(sin(x).\cos(x))')
+
+08
+x=linspace(0.01,0.02,50);
+y=sin(1./x);
+subplot(2,1,1),plot(x,y)
+subplot(2,1,2),fplot(@(x)sin(1./x),[0.01,0.02])
+
+
+09
+syms x
+f1=log(x);
+f2=exp(0.1*x).\5000;
+subplot(1,2,1),ezplot(f1,[0,pi/2])
+subplot(1,2,2),ezplot(f2,[0,pi/2])
+
+?为什么是右除，还5000exp(-x/10)???
+
+10
+t=0:0.01:4*pi;
+r=abs(sin(t).*cos(t));
+polar(t,r)
+
+11
+向量a,b
+
+判断相等
+all(a==b) 
+
+12
+[x,y]=pol2cart(t,r)
+把极坐标或圆柱坐标转换为直角坐标(笛卡儿坐标)
+
+
+13
+semilogx,semilogy,loglog(x,y),plotyy
+
+14
+x=0:0.25:4;
+y=exp(x);
+plotyy(x,y,x,y,'plot','semilogy');
+hold on;
+title('题目');
+ylabel('座标轴');
+xlabel('x轴'); 
+
+%%%%%ch07
+图形标注
+01
+axis mormal,axis equal,axis square,axis image,axis image fill,axis tight,
+
+02
+fill(x,y,'k')
+
+03
+set(n),返回关于图形窗口Figure(n)的所有图像属性的名称和属性值所有可能取值。
+get(n),返回关于图形窗口Figure(n)的所有图像属性的名称和当前属性值。
+gcf,获取当前图形窗口的句柄
+gca,获取当前坐标轴的句柄
+函数 gcf返回当前图象窗口的句柄，而函数 gca 则返回在当前图象窗口中的当前坐标系对象的句柄，函数 gco返回当前选择对象的句柄
+
+04
+P127
+text命令属性列表
+
+05
+x=0:pi/50:2*pi;
+ plot(x,sin(x))
+ title('正弦函数图形')
+ xlabel('x Value'),ylabel('sin(x)')
+ text(3*pi/4,sin(3*pi/4),'<---sin(3pi/4)')
+ text(5*pi/4,sin(5*pi/4),'sin(5pi/4)\rightarrow','HorizontalAlignment','right')
+
+
+06
+set(gca, 'GridLineStyle', ':');  % 设置为虚线
+set(gca, 'GridAlpha', 1);  % 设置透明度，注意参数的范围是[0,1]
+% 方法1
+set(gca, 'XTick', 0:50/5:50);  % 此时划分为了5段，每段长10，网格线和坐标轴都发生了变化
+
+% 方法2，这种方法无法自由控制网格线的密度
+set(gca, 'XMinorGrid','on');
+
+% 方法3，可以自由控制
+grid on;
+set(gca, 'GridLineStyle', ':');  % 设置为虚线
+set(gca, 'GridAlpha', 1);  % 设置透明度
+set(gca, 'XTick', 0:50/10:50);  % 划分为10段，每段长5，这是想要的网格线数量
+N = 2;  % 想要的坐标轴显示，即隔一个网格显示一个刻度，10/5 = 2
+% 设置想要的坐标轴刻度
+a = get(gca,'XTickLabel');  
+b = cell(size(a));
+b(mod(1:size(a,1),N)==1,:) = a(mod(1:size(a,1),N)==1,:);
+set(gca,'XTickLabel',b);
+
+XTick和XTickLabel的区别：XTick控制X轴上的那个小竖线，XTickLabel用来控制X轴下面的数字显示，其他坐标轴也一样。
+
+07
+x = linspace(0,10);
+y = sin(x);
+ax1 = subplot(2,1,1);
+plot(ax1,x,y)
+
+y2 = sin(3*x);set(gca,'Xgrid','on')
+ax2 = subplot(2,1,2);
+plot(ax2,x,y2)
+
+grid(ax1,'on')
+
+08
+set(gca,'Ygrid','on')
+09p133
+条形图，面积图，饼图，柱状图(hist,rose),
+bar,bar3,水平放置barh,bar3h
+area,pie,pie3,hist,rose,
+
+x=[31 47 35 22 10];
+explode=[0 0 0 0 1];
+pie(x,explode,{'优','良','中','及格','不及格'})
+
+09
+set(gca,'layer','top')
+就是讲图纸的背景放到了所画的图像的顶层,换句话说就是感觉你的图形透明了一样 
+
+10
+rand 生成均匀分布的伪随机数。分布在（0~1）之间
+randn 生成标准正态分布的伪随机数（均值为0，方差为1）
+randi 生成均匀分布的伪随机整数
+EdgeColor是边沿的颜色
+facecolor是表面的颜色
+none是表面的颜色，表示无颜色
+
+11
+hist(Y),hist(Y,x)
+rose(theta),(%20个以内）rose(theta,x),rose(theta,n),
+[tout,rout]=rose(...),后用polar(tout,rout)
+
+12离散数据图形
+误差棒图，火柴杆图，阶梯图
+errorbar,stem,stem3,stairs,
+
+13向量图形
+罗盘图，羽毛图，箭头图，
+compass,feather,quiver,quiver3
+
+14
+%创建统计工资对应的矩形
+ jb=[800;685;685;613;800;613;800;685;613;613;800;685;613;613;685;613]   %基本工资统计
+ jj=[700;700;600;600;700;700;700;700;600;600;700;600;600;600;700;600];    %奖金统计
+ zf=[130;100;100;100;130;100;130;100;100;100;130;100;100;100;130;100];   %住房基金统计
+ bx=100*ones(16) ;
+ bx=bx(:,1)                                                              %保险统计
+ SF=jb+jj+zf+bx                                                        %实发工资结果
+
+ Z=[jb jj zf bx SF]                                                   %工资清单统计结果 
+%绘制条形图
+ subplot(2,3,1)
+ bar(Z)
+ title('二维条形图')
+ subplot(2,3,2)
+ bar3(Z),title('三维条形图')
+%绘制面积图
+ subplot(2,3,3)
+ area(Z)
+ grid on
+ colormap summer
+ set(gca,'layer','top')
+ title('面积图')
+%对工资多少进行排序
+ max(Z)                                                %求最大值
+ sort(Z)                                               %从小到大排列工资单
+
+ mad(Z)           ****                                      %求绝对差分平均值
+
+ M=range(Z)       ****                                         %求工资差
+%绘制饼形图
+ subplot(2,3,4)
+ pie(M)
+ title('二维饼图') 
+ subplot(2,3,5)
+ explode=[0 0 0 1 1];
+ pie3(M,explode)
+ title('三维分离饼图')
+%绘制柱状图
+ subplot(2,3,6)
+ hist(M)
+ title('高斯分布柱状图')
+
+
+ch08三维绘图%%%%%%%%%%%%
+plot3,
+ezplot3,
+mesh,meshgrid,hidden on/off,
+ezmesh,
+surf,
+ezsurf,
+cylinder,sphere,
+contour3,contour,contourf,contourc,clabel,
+ezcontour,ezsurfc,
+view,
+colormap,
+brighten,caxis,colorbar,shading,
+surfl, light,lightangle,lighting,
+imread,imwrite,
+image,imagesc,imshow,
+imfo=imfinfo,                                                                  moviein,getframe,movie,                                                                                                                                                                                                            
+01
+figure
+ t=linspace(0.2*pi,800);%linspace用于产生x1,x2之间的N点行线性的矢量，其中x1、x2、N分别为起始值、终止值、元度素个数。若默认知N，默认点数为100
+ x=t.*cos(t);
+ y=t.*sin(t);
+ z=t;
+ plot3(x,y,z,'r')
+ title('圆锥螺线')
+不一样啊
+figure
+ezplot3('t.*cos(t)','t.*sin(t)','t',[0,600],'animate')
+
+02
+[X,Y,Z]=peaks(30);
+x=X(1,:);
+y=Y(:,1);
+i=find(y<0.8&y<1,2);
+j=find(x>-0.6&x<0.5);
+Z(i,j)=nan*Z(i,j);
+surf(X,Y,Z)
+title('kong')
+xlabel('x-axis'),ylabel('y-axis'),zlabel('z-axis');
+
+03
+Z=peaks;
+[C,h]=contour(Z,5);
+clabel(C,h)
+
+04
+pcolor(hadamard(20));
+colormap(gray(2));
+axis ij
+axis square
+
+05
+在matlab命令行输入cmap=colormap,可以得到当前的色谱
+cmap=colormap('jet')
+
+06
+[x,y,z]=sphere;
+subplot(1,2,1);
+surf(x,y,z),shading interp
+light('position',[2,-2,2],'style','local')
+lighting phong
+subplot(1,2,2)
+surf(x,y,z,-z),shading flat
+light,lighting flat
+light('position',[-1 -1 -2],'color','y')
+light('position',[-1,0.5,1],'style','local','color','w')
+
+07
+linkaxes([ax1,ax2,ax3],'xy')
+axis(ax,'image')
+axis tight 将坐标轴显示的框调整到显示数据最紧凑的情况
+08
+[X,Y,Z]=sphere;
+surf(X,Y,Z)
+axis([-3,3,-3,3,-1,1])
+axis off
+shading interp
+colormap hot
+M=moviein(20);
+for i=1:20
+    view(-37.5+24*(i-1),30)
+    M(:,i)=getframe;
+end
+movie(M,3)
+-----
+x=linspace(0,2*pi,201);
+k=linspace(1,20,20);
+for idx=1:length(k)
+    plot(x,sin(k(idx)*x),'r','LineWidth',2);
+    grid on
+    ylim([-1 1]);
+    xlim([0 2*pi]);
+    xlabel('x');
+    ylabel('sin(kx)');
+    title(['k=',num2str(k(idx))]);
+    M(idx)=getframe(gcf);
+end
+movie(M,2)
+
+09
+[X,Y,Z]=peaks(20);
+x=X(1,:);
+y=Y(:,1);
+i=find(y>0.8&y<1.2);%%
+j=find(x>-.6&x<.5); %%
+Z(i,j)=nan*Z(i,j);
+surf(X,Y,Z)
+title('kong')
+xlabel('x-axis'),ylabel('y-axis'),zlabel('z-axis')
+
+10
+ Z=peaks;
+ [C,h]=contour(Z,5);
+ clabel(C,h);
+ title('等值线的标注')
+
+11
+[X,Y]=meshgrid(-7.5:0.5:7.5);
+Z=cos(sqrt(X.^2+Y.^2))./sqrt(X.^2+Y.^2);
+subplot(1,2,1)
+surf(X,Y,Z),shading interp
+light('position',[2,-2,2],'style','local')
+lighting phong
+title('sanwei');
+
+subplot(1,2,2)
+surf(X,Y,Z),shading flat
+light,lighting flat
+light('position',[-1 -1 -2],'color','y')
+light('position',[-1,0.5,1],'style','local','color','w')
+title('shading flat')
+
+
+12
+ Z=peaks;
+ [C,h]=contourf(Z,10);
+ colormap gray;
+ title('二维等值线图及颜色填充')
+
+13
+load clown
+cmap1=map;
+cmap2=gray(size(map,1));
+cmap=[cmap1;cmap2];
+colormap(cmap)
+
+subplot(121)
+image(X)
+subplot(122)
+X2=X+max(X(:));
+image(X2)
+
+
+14
+[X,Y,Z]=sphere(6);
+surf(X,Y,Z)
+axis equal
+axis([-3,3,-3,3,-1,1])
+axis on
+
+
+M=moviein(20);
+for i=1:200
+    view(-37.5+24*(i-1),30)
+    M(:,i)=getframe;
+end
+movie(M,3)
+
+15
+ axis ij 正常显示 axis xy 上下镜面显示
+
+16
+axis square/将当前坐标系图形设置为方形。横轴及纵轴比例是1：1
+ axis equal/将横轴纵轴的定标系数设成相同值
+也就是说axis square刻度范围不一定一样，但是一定是方形的。
+axis equal刻度是等长的，但也不一定是方形的。
+
+
+17
+ezplot3('exp(t/10)','sin(t)*cos(t)','t',[0,16*pi],'animate')
+
+ezplot3('t.*cos(t)','t.*sin(t)','t',[0,16*pi],'animate')
+
+18
+clear;clc;clf;
+x=0:pi/100:50;
+y=sin(x).*x;
+plot(x,y)
+set(gcf,'color',[1 1 1]) %设置背景色为白色
+F=getframe(gcf); % 获取整个窗口内容的图像
+F1=getframe; % 获取坐标轴为界的图像
+imwrite(F.cdata,'test1.png') %将F.cdata写入test1.png图片
+imwrite(F1.cdata,'test2.png')
+F2 = getframe(gcf,[150 150 200 200]); % 截取一部分图像
+figure
+imshow(F2.cdata); % 显示截取后的图片
+
+19
+set(gca,'zdir','reverse'); %将坐标轴数值反向
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
